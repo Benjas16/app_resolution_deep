@@ -1470,8 +1470,9 @@
         <!-- Modal para foto de perfil -->
         <div class="modal" id="profile-picture-modal">
             <div class="modal-content">
-                <div class="modal-option" onclick="takePhoto()">Tirar Foto</div>
+
                 <div class="modal-option" onclick="chooseFromGallery()">Escolher da Galeria</div>
+                <div class="modal-option" onclick="removeProfilePicture()" style="color: var(--error-red);">Remover Foto</div>
                 <button class="modal-close" onclick="closeProfilePictureModal()">Cancelar</button>
             </div>
         </div>
@@ -2446,39 +2447,7 @@
             document.getElementById('profile-picture-modal').style.display = 'none';
         }
 
-        function takePhoto() {
-            // Criar input file para câmera
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.capture = 'camera';
-            
-            input.onchange = function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imageUrl = e.target.result;
-                        // Salvar no localStorage
-                        localStorage.setItem('profilePicture', imageUrl);
-                        // Atualizar interface
-                        updateProfilePicture(imageUrl);
-                        showToast('Foto de perfil atualizada!');
-                        
-                        // Salvar no Firestore se usuário estiver logado
-                        if (currentUser) {
-                            db.collection('users').doc(currentUser.uid).update({
-                                photoURL: imageUrl
-                            }).catch(error => console.error('Erro ao salvar foto:', error));
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            
-            input.click();
-            closeProfilePictureModal();
-        }
+
 
         function chooseFromGallery() {
             // Criar input file para galeria
@@ -2517,6 +2486,25 @@
             document.getElementById('profile-picture').src = imageUrl;
             document.getElementById('profile-picture').style.display = 'block';
             document.getElementById('avatar-initial').style.display = 'none';
+        }
+
+        function removeProfilePicture() {
+            // Remover do localStorage
+            localStorage.removeItem('profilePicture');
+            
+            // Reverter para avatar padrão
+            document.getElementById('profile-picture').style.display = 'none';
+            document.getElementById('avatar-initial').style.display = 'flex';
+            
+            // Remover do Firestore se usuário estiver logado
+            if (currentUser) {
+                db.collection('users').doc(currentUser.uid).update({
+                    photoURL: firebase.firestore.FieldValue.delete()
+                }).catch(error => console.error('Erro ao remover foto:', error));
+            }
+            
+            showToast('Foto de perfil removida!');
+            closeProfilePictureModal();
         }
 
         // Inicializar aplicação
