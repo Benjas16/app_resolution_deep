@@ -499,59 +499,212 @@
             background-color: white;
             border-radius: 15px;
             overflow: hidden;
-            margin-bottom: 70px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .menu-section {
-            padding: 15px 20px;
-            background-color: var(--light-beige);
-            font-weight: 600;
-            color: var(--dark-brown);
-            font-size: 0.9rem;
-        }
-
         .menu-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--gray);
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .menu-item:last-child {
             border-bottom: none;
         }
 
+        .menu-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .menu-item span {
+            font-weight: 500;
+        }
+
         .menu-item i {
             color: var(--soft-brown);
         }
 
-        /* Outras telas */
         .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             background: none;
             border: none;
             font-size: 1.5rem;
-            margin-bottom: 20px;
             color: var(--dark-brown);
             cursor: pointer;
+            z-index: 10;
         }
 
         .page-title {
+            text-align: center;
+            margin-bottom: 30px;
             font-size: 1.5rem;
-            margin-bottom: 25px;
             font-weight: 600;
         }
 
-        .order-item, .cart-item {
-            background-color: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+        /* Tela Detalhes do Produto */
+        .product-detail {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 250px;
+            background-color: var(--light-beige);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        .detail-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .detail-price {
+            font-size: 1.3rem;
+            color: var(--medium-brown);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .detail-description {
+            color: var(--soft-brown);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .size-option {
+            padding: 10px 20px;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .size-option.active {
+            border-color: var(--medium-brown);
+            background-color: var(--medium-brown);
+            color: white;
+        }
+
+        .customization-options {
+            margin-bottom: 20px;
+        }
+
+        .option-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .option-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 8px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .option-item.active {
+            background-color: var(--medium-brown);
+            color: white;
+            border-color: var(--medium-brown);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gray);
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qty-value {
+            font-size: 1.2rem;
+            font-weight: 500;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background-color: var(--medium-brown);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--deep-brown);
+        }
+
+        /* Tela Favoritos */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--soft-brown);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Tela Carrinho */
+        .cart-item {
+            display: flex;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
@@ -567,196 +720,22 @@
         .cart-item-price {
             color: var(--medium-brown);
             font-weight: 700;
+            margin-bottom: 10px;
         }
 
         .cart-item-actions {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .product-detail {
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .detail-img {
-            width: 100%;
-            height: 200px;
-            background-color: var(--light-beige);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .detail-info {
-            padding: 20px;
-        }
-
-        .detail-title {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .detail-price {
-            color: var(--medium-brown);
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .detail-description {
-            color: var(--soft-brown);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .size-options {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .size-option {
-            padding: 8px 15px;
-            border: 1px solid var(--gray);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .size-option.active {
-            background-color: var(--dark-brown);
-            color: white;
-            border-color: var(--dark-brown);
-        }
-
-        .customization-options {
-            margin: 15px 0;
-        }
-
-        .option-title {
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-
-        .option-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .option-item {
-            padding: 8px 15px;
-            border: 1px solid var(--gray);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .option-item.active {
-            background-color: var(--dark-brown);
-            color: white;
-            border-color: var(--dark-brown);
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            gap: 15px;
-        }
-
-        .qty-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px solid var(--gray);
-            background: none;
-            font-size: 1.2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .qty-value {
-            font-weight: 500;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .add-to-cart-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--medium-brown);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .payment-method {
-            background-color: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .payment-option {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid var(--gray);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .payment-option:last-child {
-            margin-bottom: 0;
-        }
-
-        .payment-option.active {
-            border-color: var(--medium-brown);
-            background-color: rgba(139, 87, 66, 0.1);
-        }
-
-        .payment-icon {
-            margin-right: 15px;
-            font-size: 1.5rem;
-            color: var(--medium-brown);
-        }
-
-        .payment-text {
-            flex: 1;
-        }
-
-        .payment-text h3 {
-            font-size: 1rem;
-            margin-bottom: 5px;
-        }
-
-        .payment-text p {
-            font-size: 0.8rem;
-            color: var(--soft-brown);
+            margin-top: 10px;
         }
 
         .summary {
             background-color: white;
-            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
 
         .summary-row {
@@ -767,7 +746,7 @@
 
         .summary-total {
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             border-top: 1px solid var(--gray);
             padding-top: 10px;
             margin-top: 10px;
@@ -776,69 +755,133 @@
         .discount-input {
             display: flex;
             gap: 10px;
-            margin: 15px 0;
+            margin: 20px 0;
             position: relative;
         }
 
         .discount-input input {
             flex: 1;
-            padding: 12px 15px;
+            padding: 10px;
             border: 1px solid var(--gray);
             border-radius: 8px;
-            font-size: 1rem;
         }
 
         .discount-input input.error {
             border-color: var(--error-red);
         }
 
-        .discount-error {
-            color: var(--error-red);
-            font-size: 0.8rem;
-            position: absolute;
-            bottom: -20px;
-            left: 0;
-            display: none;
-        }
-
         .apply-btn {
-            background-color: var(--dark-brown);
+            background-color: var(--medium-brown);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
-            font-size: 1rem;
             cursor: pointer;
+        }
+
+        .discount-error {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            color: var(--error-red);
+            font-size: 0.8rem;
+            display: none;
         }
 
         .checkout-btn {
             width: 100%;
-            padding: 15px;
             background-color: var(--medium-brown);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             margin-top: 20px;
         }
 
+        /* Tela Checkout */
+        .payment-method {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--gray);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option.active {
+            border-color: var(--medium-brown);
+            background-color: var(--light-beige);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: var(--medium-brown);
+        }
+
+        .payment-text {
+            flex: 1;
+        }
+
+        .payment-text h3 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .payment-text p {
+            font-size: 0.8rem;
+            color: var(--soft-brown);
+        }
+
+        /* Tela Agradecimento */
         .thank-you-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             padding: 40px 20px;
         }
 
         .thank-you-icon {
-            font-size: 4rem;
-            color: var(--medium-brown);
-            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .thank-you-icon i {
+            font-size: 3rem;
+            color: white;
         }
 
         .thank-you-title {
             font-size: 1.8rem;
             margin-bottom: 15px;
-            font-weight: 600;
+            color: var(--dark-brown);
         }
 
         .thank-you-text {
@@ -849,11 +892,11 @@
 
         .order-info {
             background-color: white;
-            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
-            text-align: left;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            width: 100%;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
 
         .info-row {
@@ -869,16 +912,17 @@
         .tracking {
             display: flex;
             justify-content: space-between;
-            margin: 30px 0;
+            width: 100%;
+            margin-bottom: 30px;
             position: relative;
         }
 
         .tracking::before {
             content: '';
             position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
+            top: 20px;
+            left: 20px;
+            right: 20px;
             height: 2px;
             background-color: var(--gray);
             z-index: 1;
@@ -893,15 +937,15 @@
         }
 
         .tracking-icon {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--success-green);
             border-radius: 50%;
-            background-color: var(--medium-brown);
-            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            color: white;
         }
 
         .tracking-label {
@@ -909,93 +953,18 @@
             color: var(--soft-brown);
         }
 
-        /* Tela Favoritos */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--soft-brown);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        /* Tela Editar Perfil */
-        .edit-profile-form {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Tela Configurações de Notificação */
-        .notification-settings {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--medium-brown);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        /* Modal para foto de perfil */
+        /* Modal */
         .modal {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            display: none;
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
         .modal-content {
@@ -1025,6 +994,31 @@
             padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-green);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-in-out;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background-color: var(--error-red);
         }
 
         /* Media Queries para responsividade */
@@ -1178,6 +1172,7 @@
                 <div class="detail-info">
                     <h2 class="detail-title" id="detail-product-name">Nome do Produto</h2>
                     <div class="detail-price" id="detail-product-price">R$ 0,00</div>
+                    <div class="detail-volume-weight" id="detail-product-volume-weight" style="font-size: 0.9rem; color: var(--soft-brown); margin-bottom: 15px;"></div>
                     <p class="detail-description" id="detail-product-description">Descrição do produto</p>
                     
                     <div class="size-options">
@@ -1335,6 +1330,10 @@
                         <span class="info-label">Total:</span>
                         <span id="order-total">R$ 0,00</span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-label">Tempo Estimado:</span>
+                        <span>15-20 min (média 17 min)</span>
+                    </div>
                 </div>
 
                 <div class="tracking">
@@ -1371,32 +1370,23 @@
                 </div>
                 <div class="profile-info">
                     <h2 id="profile-username">Usuário</h2>
-                    <p id="profile-email">usuario@exemplo.com</p>
+                    <p id="profile-email">usuario@email.com</p>
                 </div>
             </div>
 
             <div class="profile-menu">
-                <div class="menu-section">CONTA</div>
-                <div class="menu-item" onclick="showScreen('account-details')">
-                    <span>Detalhes da Conta</span>
+                <div class="menu-item" onclick="showScreen('account-settings')">
+                    <span>Configurações da Conta</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="menu-item" onclick="showScreen('edit-profile')">
-                    <span>Editar Nome</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" onclick="showScreen('notification-settings')">
-                    <span>Configurações de Notificação</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                
-                <div class="menu-section">PEDIDOS</div>
                 <div class="menu-item" onclick="showScreen('order-history')">
                     <span>Histórico de Pedidos</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                
-                <div class="menu-section">GERAL</div>
+                <div class="menu-item" onclick="showScreen('notifications')">
+                    <span>Notificações</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
                 <div class="menu-item" onclick="showScreen('help-support')">
                     <span>Ajuda e Suporte</span>
                     <i class="fas fa-chevron-right"></i>
@@ -1408,77 +1398,26 @@
             </div>
         </section>
 
-        <!-- Tela Detalhes da Conta -->
-        <section id="account-details" class="screen">
+        <!-- Tela Configurações da Conta -->
+        <section id="account-settings" class="screen">
             <button class="back-btn" onclick="showScreen('profile')">←</button>
-            <h2 class="page-title">Detalhes da Conta</h2>
+            <h2 class="page-title">Configurações da Conta</h2>
 
-            <div class="edit-profile-form">
+            <div class="form-container">
                 <div class="form-group">
                     <label for="account-username">Nome de usuário</label>
-                    <input type="text" id="account-username" placeholder="Seu nome de usuário" readonly>
+                    <input type="text" id="account-username" placeholder="Seu nome de usuário">
                 </div>
                 <div class="form-group">
                     <label for="account-email">E-mail</label>
-                    <input type="email" id="account-email" placeholder="Seu e-mail" readonly>
+                    <input type="email" id="account-email" placeholder="Seu e-mail" disabled>
                 </div>
                 <div class="form-group">
-                    <label for="account-type">Tipo de conta</label>
-                    <input type="text" id="account-type" placeholder="Tipo de conta" readonly>
+                    <label for="account-type">Tipo de Conta</label>
+                    <input type="text" id="account-type" placeholder="E-mail" disabled>
                 </div>
-            </div>
-        </section>
-
-        <!-- Tela Editar Perfil -->
-        <section id="edit-profile" class="screen">
-            <button class="back-btn" onclick="showScreen('profile')">←</button>
-            <h2 class="page-title">Editar Nome</h2>
-
-            <div class="edit-profile-form">
-                <div class="form-group">
-                    <label for="edit-username">Nome de usuário</label>
-                    <input type="text" id="edit-username" placeholder="Seu nome de usuário">
-                </div>
+                
                 <button class="btn" style="width: 100%" onclick="updateProfile()">Salvar Alterações</button>
-            </div>
-        </section>
-
-        <!-- Tela Configurações de Notificação -->
-        <section id="notification-settings" class="screen">
-            <button class="back-btn" onclick="showScreen('profile')">←</button>
-            <h2 class="page-title">Configurações de Notificação</h2>
-
-            <div class="notification-settings">
-                <div class="menu-item">
-                    <div class="payment-text">
-                        <h3>Notificações por E-mail</h3>
-                        <p>Receba atualizações sobre promoções e novos produtos</p>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="email-notifications" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="menu-item">
-                    <div class="payment-text">
-                        <h3>Notificações de Pedidos</h3>
-                        <p>Receba atualizações sobre o status dos seus pedidos</p>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="order-notifications" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="menu-item">
-                    <div class="payment-text">
-                        <h3>Notificações de Promoções</h3>
-                        <p>Receba alertas sobre ofertas especiais</p>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="promo-notifications" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
             </div>
         </section>
 
@@ -1487,13 +1426,32 @@
             <button class="back-btn" onclick="showScreen('profile')">←</button>
             <h2 class="page-title">Histórico de Pedidos</h2>
 
-            <div id="orders-container">
-                <!-- Pedidos serão carregados aqui -->
-                <div class="empty-state">
-                    <i class="fas fa-shopping-bag"></i>
-                    <p>Você ainda não fez nenhum pedido</p>
+            <div id="order-history-container">
+                <!-- Histórico será carregado aqui -->
+            </div>
+        </section>
+
+        <!-- Tela Notificações -->
+        <section id="notifications" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Notificações</h2>
+
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <span>Notificações por E-mail</span>
+                    <input type="checkbox" id="email-notifications" checked>
+                </div>
+                <div class="menu-item">
+                    <span>Notificações de Pedidos</span>
+                    <input type="checkbox" id="order-notifications" checked>
+                </div>
+                <div class="menu-item">
+                    <span>Promoções e Ofertas</span>
+                    <input type="checkbox" id="promo-notifications" checked>
                 </div>
             </div>
+
+            <button class="btn" style="width: 100%; margin-top: 20px;" onclick="saveNotificationSettings()">Salvar Configurações</button>
         </section>
 
         <!-- Tela Ajuda e Suporte -->
@@ -1502,20 +1460,8 @@
             <h2 class="page-title">Ajuda e Suporte</h2>
 
             <div class="profile-menu">
-                <div class="menu-item">
-                    <span>FAQ - Perguntas Frequentes</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item">
+                <div class="menu-item" onclick="window.location.href='https://wa.me/5599992230979'">
                     <span>Fale Conosco</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item">
-                    <span>Política de Privacidade</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item">
-                    <span>Termos de Uso</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
             </div>
@@ -1568,76 +1514,111 @@
             { 
                 id: 1, 
                 name: "Café Expresso", 
-                price: 5.90, 
+                price: { P: 5.90, M: 7.90, G: 9.90 }, 
+                volume: { P: 50, M: 100, G: 150 },
                 category: "coffee", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/vrlLQPaoVtDSWzWr.jpg", 
                 description: "Café forte e encorpado, perfeito para começar o dia.", 
-                badge: "Mais Vendido" 
+                badge: "Mais Vendido",
+                hasLactose: true
             },
             { 
                 id: 2, 
                 name: "Cappuccino", 
-                price: 8.50, 
+                price: { P: 8.50, M: 10.50, G: 12.50 }, 
+                volume: { P: 150, M: 250, G: 350 },
                 category: "coffee", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/ublxQXGRiWAcBXOB.jpg", 
                 description: "Café cremoso com leite vaporizado e uma camada de espuma.", 
-                badge: "" 
+                badge: "",
+                hasLactose: true
             },
             { 
                 id: 3, 
                 name: "Latte Macchiato", 
-                price: 9.90, 
+                price: { P: 9.90, M: 11.90, G: 13.90 }, 
+                volume: { P: 200, M: 300, G: 400 },
                 category: "coffee", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/bjlImesUPzfxnhZQ.jpeg", 
                 description: "Leite vaporizado com um toque de café expresso.", 
-                badge: "" 
+                badge: "",
+                hasLactose: true
             },
             { 
                 id: 4, 
                 name: "Café", 
-                price: 7.50, 
+                price: { P: 7.50, M: 9.50, G: 11.50 }, 
+                volume: { P: 100, M: 200, G: 300 },
                 category: "coffee", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/cOhnVfbZraguqvvU.jpeg", 
                 description: "Café tradicional preparado com grãos selecionados.", 
-                badge: "Novo" 
+                badge: "Novo",
+                hasLactose: true
             },
             { 
                 id: 5, 
                 name: "Chá Verde", 
-                price: 6.50, 
+                price: { P: 6.50, M: 8.50, G: 10.50 }, 
+                volume: { P: 200, M: 300, G: 400 },
                 category: "tea", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/rXNNzmEdqaoBmWpo.jpeg", 
                 description: "Chá verde refrescante com propriedades antioxidantes.", 
-                badge: "" 
+                badge: "",
+                hasLactose: false
             },
             { 
                 id: 6, 
                 name: "Croissant", 
-                price: 7.90, 
+                price: { P: 6.90, M: 7.90, G: 8.90 }, 
+                weight: { P: 60, M: 80, G: 100 },
                 category: "pastry", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/GnsMhTnTqxApyGUW.jpg", 
                 description: "Croissant folhado e crocante, perfeito para acompanhar o café.", 
-                badge: "" 
+                badge: "",
+                hasLactose: false
             },
             { 
                 id: 7, 
                 name: "Bolo de Cenoura", 
-                price: 12.90, 
+                price: { P: 10.90, M: 12.90, G: 14.90 }, 
+                weight: { P: 100, M: 120, G: 150 },
                 category: "pastry", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/buQteXExKCPdxela.webp", 
                 description: "Bolo de cenoura com cobertura de chocolate.", 
-                badge: "" 
+                badge: "",
+                hasLactose: false
             },
             { 
                 id: 8, 
                 name: "Mocha Especial", 
-                price: 11.90, 
+                price: { P: 11.90, M: 13.90, G: 15.90 }, 
+                volume: { P: 200, M: 300, G: 400 },
                 category: "special", 
                 image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/rrjMVGNCCMlIQcXC.jpeg", 
                 description: "Café com chocolate, leite vaporizado e chantilly.", 
-                badge: "Especial" 
+                badge: "Especial",
+                hasLactose: true
             }
         ];
+
+        // Função para mostrar toast
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
 
         // Funções de navegação
         function showScreen(screenId) {
@@ -1693,7 +1674,7 @@
             if (hour < 12) {
                 greeting = "Bom Dia";
             } else if (hour < 18) {
-                greeting = "Boa Tarde";
+                greeting = "Bom Dia";
             }
 
             if (currentUser) {
@@ -1741,7 +1722,7 @@
             
             // Validar campos
             if (!email || !password) {
-                showLoginError('Por favor, preencha todos os campos.');
+                showToast('Por favor, preencha todos os campos.', 'error');
                 return;
             }
 
@@ -1750,9 +1731,10 @@
                     currentUser = userCredential.user;
                     showScreen('home');
                     loadProducts();
+                    showToast('Login realizado com sucesso!');
                 })
                 .catch((error) => {
-                    showLoginError('Você errou um dos dados. Caso não tenha conta se cadastre.');
+                    showToast('Você errou um dos dados. Caso não tenha conta se cadastre.', 'error');
                 });
         }
 
@@ -1764,17 +1746,17 @@
 
             // Validar campos
             if (!username || !email || !password || !confirmPassword) {
-                alert('Por favor, preencha todos os campos.');
+                showToast('Por favor, preencha todos os campos.', 'error');
                 return;
             }
 
             if (password !== confirmPassword) {
-                alert('As senhas não coincidem.');
+                showToast('As senhas não coincidem.', 'error');
                 return;
             }
 
             if (password.length < 6) {
-                alert('A senha deve ter pelo menos 6 caracteres.');
+                showToast('A senha deve ter pelo menos 6 caracteres.', 'error');
                 return;
             }
 
@@ -1793,81 +1775,25 @@
                 .then(() => {
                     showScreen('home');
                     loadProducts();
+                    showToast('Conta criada com sucesso!');
                 })
                 .catch((error) => {
-                    alert('Erro ao criar conta: ' + error.message);
-                });
-        }
-
-        function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.addScope('email');
-            provider.addScope('profile');
-            
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    currentUser = result.user;
-                    
-                    // Verificar se é um novo usuário ou atualizar dados existentes
-                    return db.collection('users').doc(currentUser.uid).get()
-                        .then((doc) => {
-                            if (!doc.exists || result.additionalUserInfo.isNewUser) {
-                                // Criar novo usuário
-                                return db.collection('users').doc(currentUser.uid).set({
-                                    username: currentUser.displayName || 'Usuário',
-                                    email: currentUser.email,
-                                    photoURL: currentUser.photoURL,
-                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                                    accountType: 'google'
-                                });
-                            } else {
-                                // Atualizar dados do usuário existente se necessário
-                                const userData = doc.data();
-                                const updates = {};
-                                
-                                if (userData.photoURL !== currentUser.photoURL) {
-                                    updates.photoURL = currentUser.photoURL;
-                                }
-                                if (userData.email !== currentUser.email) {
-                                    updates.email = currentUser.email;
-                                }
-                                
-                                if (Object.keys(updates).length > 0) {
-                                    return db.collection('users').doc(currentUser.uid).update(updates);
-                                }
-                            }
-                        });
-                })
-                .then(() => {
-                    showScreen('home');
-                    loadProducts();
-                    loadProfile(); // Carregar perfil para exibir dados do Google
-                })
-                .catch((error) => {
-                    console.error('Erro no login com Google:', error);
-                    if (error.code === 'auth/popup-closed-by-user') {
-                        // Usuário fechou o popup, não mostrar erro
-                        return;
-                    } else if (error.code === 'auth/account-exists-with-different-credential') {
-                        alert('Esta conta já existe com um método de login diferente. Tente fazer login com e-mail e senha.');
-                    } else {
-                        alert('Erro ao fazer login com Google: ' + error.message);
-                    }
+                    showToast('Erro ao criar conta: ' + error.message, 'error');
                 });
         }
 
         function resetPassword() {
             const email = document.getElementById("login-identifier").value;
             if (!email) {
-                alert("Por favor, digite seu e-mail no campo de login para redefinir a senha.");
+                showToast("Por favor, digite seu e-mail no campo de login para redefinir a senha.", 'error');
                 return;
             }
             auth.sendPasswordResetEmail(email)
                 .then(() => {
-                    alert("E-mail de redefinição de senha enviado para " + email + "!");
+                    showToast("E-mail de redefinição de senha enviado para " + email + "!");
                 })
                 .catch((error) => {
-                    alert("Erro ao enviar e-mail de redefinição: " + error.message);
+                    showToast("Erro ao enviar e-mail de redefinição: " + error.message, 'error');
                 });
         }
 
@@ -1877,19 +1803,7 @@
                 cart = [];
                 favorites = [];
                 showScreen('get-started');
-            });
-        }
-
-        function showLoginError(message) {
-            // Mostrar mensagem de erro em todos os campos de erro
-            document.querySelectorAll('.error-message').forEach(error => {
-                error.textContent = message;
-                error.style.display = 'block';
-            });
-            
-            // Adicionar classe de erro aos inputs
-            document.querySelectorAll('.form-group input').forEach(input => {
-                input.classList.add('error');
+                showToast('Logout realizado com sucesso!');
             });
         }
 
@@ -1912,7 +1826,7 @@
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <div class="product-price">R$ ${product.price.P.toFixed(2)}</div>
                     </div>
                 `;
                 container.appendChild(productElement);
@@ -1922,41 +1836,59 @@
         function showProductDetail(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
-            
+
             currentProductDetail = product;
-            productQuantity = 1;
             selectedSize = 'P';
             selectedMilk = 'com-leite';
-            
+            productQuantity = 1;
+
             document.getElementById('detail-product-name').textContent = product.name;
-            document.getElementById('detail-product-price').textContent = `R$ ${product.price.toFixed(2)}`;
-            document.getElementById('detail-product-description').textContent = product.description;
+            document.getElementById('detail-product-price').textContent = `R$ ${product.price[selectedSize].toFixed(2)}`;
             
-            const imageElement = document.getElementById('detail-product-image');
-            const iconElement = document.getElementById('detail-product-icon');
-            
-            if (product.image) {
-                imageElement.src = product.image;
-                imageElement.style.display = 'block';
-                iconElement.style.display = 'none';
+            // Exibir volume ou peso
+            const volumeWeightElement = document.getElementById('detail-product-volume-weight');
+            if (product.volume) {
+                volumeWeightElement.textContent = `${product.volume[selectedSize]}mL`;
+            } else if (product.weight) {
+                volumeWeightElement.textContent = `${product.weight[selectedSize]}g`;
             } else {
-                imageElement.style.display = 'none';
-                iconElement.style.display = 'block';
+                volumeWeightElement.textContent = '';
             }
             
+            document.getElementById('detail-product-description').textContent = product.description;
             document.getElementById('product-quantity').textContent = productQuantity;
-            
+
+            // Mostrar imagem
+            const img = document.getElementById('detail-product-image');
+            const icon = document.getElementById('detail-product-icon');
+            if (product.image) {
+                img.src = product.image;
+                img.style.display = 'block';
+                icon.style.display = 'none';
+            } else {
+                img.style.display = 'none';
+                icon.style.display = 'block';
+            }
+
+            // Mostrar/ocultar opção de leite baseado no produto
+            const milkOptions = document.querySelector('.customization-options');
+            if (product.hasLactose) {
+                milkOptions.style.display = 'block';
+            } else {
+                milkOptions.style.display = 'none';
+            }
+
             // Resetar seleções
             document.querySelectorAll('.size-option').forEach(option => {
                 option.classList.remove('active');
             });
             document.querySelector('.size-option').classList.add('active');
-            
+
             document.querySelectorAll('.option-item').forEach(option => {
                 option.classList.remove('active');
             });
             document.querySelector('.option-item').classList.add('active');
-            
+
             showScreen('product-detail');
         }
 
@@ -1966,6 +1898,20 @@
                 option.classList.remove('active');
             });
             event.target.classList.add('active');
+            
+            // Atualizar preço baseado no tamanho
+            if (currentProductDetail) {
+                const newPrice = currentProductDetail.price[size];
+                document.getElementById('detail-product-price').textContent = `R$ ${newPrice.toFixed(2)}`;
+                
+                // Atualizar volume ou peso baseado no tamanho
+                const volumeWeightElement = document.getElementById('detail-product-volume-weight');
+                if (currentProductDetail.volume) {
+                    volumeWeightElement.textContent = `${currentProductDetail.volume[size]}mL`;
+                } else if (currentProductDetail.weight) {
+                    volumeWeightElement.textContent = `${currentProductDetail.weight[size]}g`;
+                }
+            }
         }
 
         function selectMilk(milk) {
@@ -1984,21 +1930,17 @@
         function addToCartFromDetail() {
             if (!currentProductDetail) return;
 
-            // Calcular preço baseado no tamanho
-            let priceMultiplier = 1;
-            if (selectedSize === 'M') priceMultiplier = 1.2;
-            if (selectedSize === 'G') priceMultiplier = 1.4;
-
-            const finalPrice = currentProductDetail.price * priceMultiplier;
-
             const cartItem = {
                 id: currentProductDetail.id,
                 name: currentProductDetail.name,
-                price: finalPrice,
+                price: currentProductDetail.price[selectedSize],
                 image: currentProductDetail.image,
                 quantity: productQuantity,
                 size: selectedSize,
-                milk: selectedMilk
+                milk: selectedMilk,
+                volume: currentProductDetail.volume ? currentProductDetail.volume[selectedSize] : null,
+                weight: currentProductDetail.weight ? currentProductDetail.weight[selectedSize] : null,
+                hasLactose: currentProductDetail.hasLactose
             };
 
             const existingItemIndex = cart.findIndex(item => 
@@ -2014,7 +1956,7 @@
             }
 
             updateCartBadge();
-            alert(`${currentProductDetail.name} adicionado ao carrinho!`);
+            showToast(`${currentProductDetail.name} adicionado ao carrinho!`);
             showScreen('home');
         }
 
@@ -2044,7 +1986,7 @@
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <div class="product-price">R$ ${product.price.P.toFixed(2)}</div>
                     </div>
                 `;
                 container.appendChild(productElement);
@@ -2060,8 +2002,10 @@
             const index = favorites.indexOf(productId);
             if (index > -1) {
                 favorites.splice(index, 1);
+                showToast('Removido dos favoritos!');
             } else {
                 favorites.push(productId);
+                showToast('Adicionado aos favoritos!');
             }
 
             loadProducts();
@@ -2099,7 +2043,7 @@
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <div class="product-price">R$ ${product.price.P.toFixed(2)}</div>
                     </div>
                 `;
                 container.appendChild(productElement);
@@ -2141,7 +2085,7 @@
                         <div class="cart-item-name">${item.name}</div>
                         <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
                         <div style="font-size: 0.8rem; color: var(--soft-brown); margin-top: 5px;">
-                            ${item.size} • ${item.milk === 'com-leite' ? 'Com Leite' : 'Sem Leite'}
+                            ${item.size} • ${item.volume ? item.volume + 'mL' : item.weight + 'g'}${item.hasLactose ? ' • ' + (item.milk === 'com-leite' ? 'Com Leite' : 'Sem Leite') : ''}
                         </div>
                         <div class="cart-item-actions">
                             <button class="qty-btn" onclick="updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
@@ -2214,6 +2158,7 @@
             
             loadCart();
             updateCartBadge();
+            showToast('Item removido do carrinho!');
         }
 
         function updateCartBadge() {
@@ -2258,7 +2203,7 @@
             const total = subtotal - discountApplied;
             const discountPercent = Math.round((discountApplied / subtotal) * 100);
             
-            alert(`Cupom ${code} aplicado com sucesso! Desconto de R$ ${discountApplied.toFixed(2)} (${discountPercent}%)`);
+            showToast(`Cupom ${code} aplicado com sucesso! Desconto de R$ ${discountApplied.toFixed(2)} (${discountPercent}%)`);
         }
 
         // Funções de checkout
@@ -2280,7 +2225,7 @@
             }
 
             if (cart.length === 0) {
-                alert('Seu carrinho está vazio!');
+                showToast('Seu carrinho está vazio!', 'error');
                 return;
             }
 
@@ -2316,14 +2261,15 @@
 
                     // Mostrar tela de agradecimento
                     showScreen('thank-you');
+                    showToast('Pedido confirmado com sucesso!');
                     
                     // Notificar cliente após 17 minutos
                     setTimeout(() => {
-                        alert('Seu pedido está pronto para retirada!');
+                        showToast('Seu pedido está pronto para retirada!');
                     }, 17 * 60 * 1000); // 17 minutos em milissegundos
                 })
                 .catch((error) => {
-                    alert('Erro ao processar pedido: ' + error.message);
+                    showToast('Erro ao processar pedido: ' + error.message, 'error');
                 });
         }
 
@@ -2344,7 +2290,6 @@
                         
                         document.getElementById('profile-username').textContent = username;
                         document.getElementById('account-username').value = username;
-                        document.getElementById('edit-username').value = username;
                         document.getElementById('avatar-initial').textContent = username.charAt(0).toUpperCase();
                         
                         // Mostrar tipo de conta
@@ -2352,10 +2297,11 @@
                         document.getElementById('account-type').value = accountTypeText;
 
                         // Carregar foto de perfil se existir
-                        if (userData.photoURL) {
-                            document.getElementById('profile-picture').src = userData.photoURL;
-                            document.getElementById('profile-picture').style.display = 'block';
-                            document.getElementById('avatar-initial').style.display = 'none';
+                        const savedPhoto = localStorage.getItem('profilePicture');
+                        if (savedPhoto) {
+                            updateProfilePicture(savedPhoto);
+                        } else if (userData.photoURL) {
+                            updateProfilePicture(userData.photoURL);
                         }
 
                         // Carregar configurações de notificação
@@ -2374,29 +2320,49 @@
         function updateProfile() {
             if (!currentUser) return;
 
-            const newUsername = document.getElementById('edit-username').value;
-            if (!newUsername) {
-                alert('Por favor, digite um nome de usuário.');
+            const username = document.getElementById('account-username').value;
+
+            if (!username) {
+                showToast('Por favor, preencha o nome de usuário.', 'error');
                 return;
             }
 
             db.collection('users').doc(currentUser.uid).update({
-                username: newUsername
+                username: username
             })
             .then(() => {
-                alert('Perfil atualizado com sucesso!');
+                showToast('Perfil atualizado com sucesso!');
                 loadProfile();
-                showScreen('profile');
             })
             .catch((error) => {
-                alert('Erro ao atualizar perfil: ' + error.message);
+                showToast('Erro ao atualizar perfil: ' + error.message, 'error');
+            });
+        }
+
+        function saveNotificationSettings() {
+            if (!currentUser) return;
+
+            const notifications = {
+                email: document.getElementById('email-notifications').checked,
+                orders: document.getElementById('order-notifications').checked,
+                promos: document.getElementById('promo-notifications').checked
+            };
+
+            db.collection('users').doc(currentUser.uid).update({
+                notifications: notifications
+            })
+            .then(() => {
+                showToast('Configurações de notificação salvas!');
+            })
+            .catch((error) => {
+                showToast('Erro ao salvar configurações: ' + error.message, 'error');
             });
         }
 
         function loadOrderHistory() {
             if (!currentUser) return;
 
-            const container = document.getElementById('orders-container');
+            const container = document.getElementById('order-history-container');
             
             db.collection('orders')
                 .where('userId', '==', currentUser.uid)
@@ -2481,17 +2447,86 @@
         }
 
         function takePhoto() {
-            alert('Funcionalidade de câmera não implementada nesta versão.');
+            // Criar input file para câmera
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.capture = 'camera';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageUrl = e.target.result;
+                        // Salvar no localStorage
+                        localStorage.setItem('profilePicture', imageUrl);
+                        // Atualizar interface
+                        updateProfilePicture(imageUrl);
+                        showToast('Foto de perfil atualizada!');
+                        
+                        // Salvar no Firestore se usuário estiver logado
+                        if (currentUser) {
+                            db.collection('users').doc(currentUser.uid).update({
+                                photoURL: imageUrl
+                            }).catch(error => console.error('Erro ao salvar foto:', error));
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            input.click();
             closeProfilePictureModal();
         }
 
         function chooseFromGallery() {
-            alert('Funcionalidade de galeria não implementada nesta versão.');
+            // Criar input file para galeria
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageUrl = e.target.result;
+                        // Salvar no localStorage
+                        localStorage.setItem('profilePicture', imageUrl);
+                        // Atualizar interface
+                        updateProfilePicture(imageUrl);
+                        showToast('Foto de perfil atualizada!');
+                        
+                        // Salvar no Firestore se usuário estiver logado
+                        if (currentUser) {
+                            db.collection('users').doc(currentUser.uid).update({
+                                photoURL: imageUrl
+                            }).catch(error => console.error('Erro ao salvar foto:', error));
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            input.click();
             closeProfilePictureModal();
+        }
+
+        function updateProfilePicture(imageUrl) {
+            document.getElementById('profile-picture').src = imageUrl;
+            document.getElementById('profile-picture').style.display = 'block';
+            document.getElementById('avatar-initial').style.display = 'none';
         }
 
         // Inicializar aplicação
         document.addEventListener('DOMContentLoaded', function() {
+            // Carregar foto de perfil salva
+            const savedPhoto = localStorage.getItem('profilePicture');
+            if (savedPhoto) {
+                updateProfilePicture(savedPhoto);
+            }
+            
             // Verificar se há usuário logado
             auth.onAuthStateChanged((user) => {
                 if (user) {
@@ -2506,4 +2541,3 @@
     </script>
 </body>
 </html>
-
