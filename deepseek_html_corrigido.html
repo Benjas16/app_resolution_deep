@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CupfulCanvas - Café Artesanal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <style>
+        /* Estilos existentes mantidos */
+        :root {
+            --dark-brown: #3E2723;
+            --light-beige: #F5E6D3;
+            --medium-brown: #8B5742;
+            --deep-brown: #5D4037;
+            --soft-brown: #A1887F;
+            --pink-beige: #F9F5F0;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --gray: #E0E0E0;
+            --dark-gray: #9E9E9E;
+            --error-red: #e74c3c;
+            --success-green: #2ecc71;
+            --background-color: #F9F5F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--dark-brown);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: var(--background-color);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .screen {
+            width: 100%;
+            min-height: 100vh;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+            background-color: var(--background-color);
+        }
+
+        .active {
+            display: flex;
+        }
+
+        /* Tela Get Started */
+        #get-started {
+            background-color: var(--dark-brown);
+            background-image: url('imagemdecaféparec.png');
+            background-size: cover;
+            background-position: center;
+            color: var(--light-beige);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .logo-large {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--light-beige);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .slogan {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            max-width: 300px;
+            color: var(--light-beige);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            background-color: var(--medium-brown);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background-color: var(--deep-brown);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--light-beige);
+            color: var(--light-beige);
+        }
+
+        /* Tela Login */
+        .form-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--dark-brown);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-brown);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-right: 45px;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--light-gray);
+        }
+
+        .form-group input.error {
+            border-color: var(--error-red);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: var(--soft-brown);
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+            margin-top: -10px;
+        }
+
+        .forgot-password a {
+            color: var(--medium-brown);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid var(--gray);
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--dark-gray);
+        }
+
+        .form-footer a {
+            color: var(--medium-brown);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Tela Home */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .greeting h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .greeting p {
+            color: var(--soft-brown);
+            font-size: 0.9rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-brown);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .banner {
+            background-color: var(--medium-brown);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-image: linear-gradient(to right, var(--medium-brown), var(--deep-brown));
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--dark-brown);
+        }
+
+        .banner h2 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .banner p {
+            font-size: 0.9rem;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 25px;
+            padding: 5px 0;
+        }
+
+        .category {
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            border: 1px solid var(--gray);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .category.active {
+            background-color: var(--dark-brown);
+            color: white;
+            border-color: var(--dark-brown);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 70px;
+        }
+
+        .product {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 120px;
+            background-color: var(--light-beige);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--soft-brown);
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--medium-brown);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--soft-brown);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .favorite-btn.active {
+            color: #e74c3c;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            color: var(--medium-brown);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--medium-brown);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--soft-brown);
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--medium-brown);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tela Perfil */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--light-beige);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--medium-brown);
+            margin-right: 20px;
+            border: 3px solid var(--medium-brown);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--medium-brown);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .profile-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--soft-brown);
+        }
+
+        .profile-menu {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 70px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-section {
+            padding: 15px 20px;
+            background-color: var(--light-beige);
+            font-weight: 600;
+            color: var(--dark-brown);
+            font-size: 0.9rem;
+        }
+
+        .menu-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item i {
+            color: var(--soft-brown);
+        }
+
+        /* Outras telas */
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-brown);
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .order-item, .cart-item {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--medium-brown);
+            font-weight: 700;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-detail {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 200px;
+            background-color: var(--light-beige);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .detail-info {
+            padding: 20px;
+        }
+
+        .detail-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .detail-price {
+            color: var(--medium-brown);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .detail-description {
+            color: var(--soft-brown);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .size-option {
+            padding: 8px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .size-option.active {
+            background-color: var(--dark-brown);
+            color: white;
+            border-color: var(--dark-brown);
+        }
+
+        .customization-options {
+            margin: 15px 0;
+        }
+
+        .option-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-item {
+            padding: 8px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .option-item.active {
+            background-color: var(--dark-brown);
+            color: white;
+            border-color: var(--dark-brown);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            gap: 15px;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--gray);
+            background: none;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .qty-value {
+            font-weight: 500;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--medium-brown);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .payment-method {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--gray);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .payment-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .payment-option.active {
+            border-color: var(--medium-brown);
+            background-color: rgba(139, 87, 66, 0.1);
+        }
+
+        .payment-icon {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--medium-brown);
+        }
+
+        .payment-text {
+            flex: 1;
+        }
+
+        .payment-text h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .payment-text p {
+            font-size: 0.8rem;
+            color: var(--soft-brown);
+        }
+
+        .summary {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 1px solid var(--gray);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .discount-input {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .discount-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .discount-input input.error {
+            border-color: var(--error-red);
+        }
+
+        .discount-error {
+            color: var(--error-red);
+            font-size: 0.8rem;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            display: none;
+        }
+
+        .apply-btn {
+            background-color: var(--dark-brown);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--medium-brown);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .thank-you-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .thank-you-icon {
+            font-size: 4rem;
+            color: var(--medium-brown);
+            margin-bottom: 20px;
+        }
+
+        .thank-you-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .thank-you-text {
+            color: var(--soft-brown);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .order-info {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            color: var(--soft-brown);
+        }
+
+        .tracking {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .tracking::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--gray);
+            z-index: 1;
+        }
+
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tracking-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--medium-brown);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .tracking-label {
+            font-size: 0.8rem;
+            color: var(--soft-brown);
+        }
+
+        /* Tela Favoritos */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--soft-brown);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Tela Editar Perfil */
+        .edit-profile-form {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tela Configurações de Notificação */
+        .notification-settings {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--medium-brown);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Modal para foto de perfil */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-option {
+            padding: 15px;
+            border-bottom: 1px solid var(--gray);
+            cursor: pointer;
+        }
+
+        .modal-option:last-child {
+            border-bottom: none;
+        }
+
+        .modal-close {
+            margin-top: 15px;
+            background-color: var(--medium-brown);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Media Queries para responsividade */
+        @media (max-width: 350px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela Get Started -->
+        <section id="get-started" class="screen active">
+            <div class="logo-large">CupfulCanvas</div>
+            <p class="slogan">Saboreie. Sorria. Crie.</p>
+            <button class="btn" onclick="showScreen('login')">Começar</button>
+        </section>
+
+        <!-- Tela Login -->
+        <section id="login" class="screen">
+            <div class="form-container">
+                <h2 class="form-title">Entrar</h2>
+                <div class="form-group">
+                    <label for="login-identifier">E-mail</label>
+                    <input type="email" id="login-identifier" placeholder="Seu e-mail">
+                    <div class="error-message" id="login-identifier-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" placeholder="Sua senha">
+                    <span class="password-toggle" onclick="togglePassword('login-password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                    <div class="error-message" id="login-password-error"></div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="resetPassword()">Esqueceu a senha?</a>
+                </div>
+                
+                <button class="btn" style="width: 100%" onclick="login()">Entrar</button>
+                
+
+                
+                <div class="form-footer">
+                    Não tem uma conta? <a href="#" onclick="showScreen('signup')">Cadastre-se</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Cadastro -->
+        <section id="signup" class="screen">
+            <button class="back-btn" onclick="showScreen('login')">←</button>
+            <div class="form-container">
+                <h2 class="form-title">Cadastrar</h2>
+                <div class="form-group">
+                    <label for="signup-username">Nome de usuário</label>
+                    <input type="text" id="signup-username" placeholder="Seu nome de usuário">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">E-mail</label>
+                    <input type="email" id="signup-email" placeholder="Seu e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Senha</label>
+                    <input type="password" id="signup-password" placeholder="Sua senha (mínimo 6 caracteres)">
+                    <span class="password-toggle" onclick="togglePassword('signup-password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" id="confirm-password" placeholder="Confirme sua senha">
+                    <span class="password-toggle" onclick="togglePassword('confirm-password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                
+                <button class="btn" style="width: 100%" onclick="signUp()">Cadastrar</button>
+                
+                <div class="form-footer">
+                    Já tem uma conta? <a href="#" onclick="showScreen('login')">Entrar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Home -->
+        <section id="home" class="screen">
+            <div class="header">
+                <div class="greeting">
+                    <h1 id="user-greeting">Bom Dia</h1>
+                    <p id="user-name">CupfulCanvas</p>
+                </div>
+            </div>
+
+            <div class="banner">
+                <h2>Compre Um Café, Ganhe Outro GRÁTIS!</h2>
+                <p>Dobro de Grãos, Dobro de Alegria</p>
+            </div>
+
+            <h2 class="section-title">Especiais do Dia</h2>
+            <div class="categories">
+                <div class="category active" onclick="filterProducts('all')">Todos</div>
+                <div class="category" onclick="filterProducts('coffee')">Cafés</div>
+                <div class="category" onclick="filterProducts('tea')">Chás</div>
+                <div class="category" onclick="filterProducts('pastry')">Salgados</div>
+                <div class="category" onclick="filterProducts('special')">Especiais</div>
+            </div>
+
+            <div class="products" id="products-container">
+                <!-- Produtos serão carregados dinamicamente -->
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showScreen('home')">
+                    <div class="nav-icon"><i class="fas fa-home"></i></div>
+                    <span>Início</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('favorites')">
+                    <div class="nav-icon"><i class="fas fa-heart"></i></div>
+                    <span>Favoritos</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('cart')">
+                    <div class="nav-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <span>Carrinho</span>
+                    <span class="nav-badge" id="nav-cart-badge" style="display: none;">0</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('profile')">
+                    <div class="nav-icon"><i class="fas fa-user"></i></div>
+                    <span>Perfil</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Detalhes do Produto -->
+        <section id="product-detail" class="screen">
+            <button class="back-btn" onclick="showScreen('home')">←</button>
+            <div class="product-detail">
+                <div class="detail-img">
+                    <img id="detail-product-image" src="" alt="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    <i class="fas fa-coffee" id="detail-product-icon" style="font-size: 4rem; color: var(--medium-brown);"></i>
+                </div>
+                <div class="detail-info">
+                    <h2 class="detail-title" id="detail-product-name">Nome do Produto</h2>
+                    <div class="detail-price" id="detail-product-price">R$ 0,00</div>
+                    <p class="detail-description" id="detail-product-description">Descrição do produto</p>
+                    
+                    <div class="size-options">
+                        <div class="size-option active" onclick="selectSize('P')">P</div>
+                        <div class="size-option" onclick="selectSize('M')">M</div>
+                        <div class="size-option" onclick="selectSize('G')">G</div>
+                    </div>
+                    
+                    <div class="customization-options">
+                        <div class="option-title">Leite</div>
+                        <div class="option-group">
+                            <div class="option-item active" onclick="selectMilk('com-leite')">Com Leite</div>
+                            <div class="option-item" onclick="selectMilk('sem-leite')">Sem Leite</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quantity-selector">
+                        <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                        <span class="qty-value" id="product-quantity">1</span>
+                        <button class="qty-btn" onclick="changeQuantity(1)">+</button>
+                    </div>
+                    
+                    <button class="add-to-cart-btn" onclick="addToCartFromDetail()">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Favoritos -->
+        <section id="favorites" class="screen">
+            <button class="back-btn" onclick="showScreen('home')">←</button>
+            <h2 class="page-title">Meus Favoritos</h2>
+
+            <div id="favorites-container">
+                <!-- Itens favoritos serão carregados aqui -->
+                <div class="empty-state">
+                    <i class="fas fa-heart"></i>
+                    <p>Você ainda não tem favoritos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Carrinho -->
+        <section id="cart" class="screen">
+            <button class="back-btn" onclick="showScreen('home')">←</button>
+            <h2 class="page-title">Meu Carrinho</h2>
+
+            <div id="cart-container">
+                <!-- Itens do carrinho serão carregados aqui -->
+            </div>
+
+            <div id="cart-summary" class="summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row" id="cart-discount-row" style="display: none;">
+                    <span>Desconto:</span>
+                    <span id="cart-discount">-R$ 0,00</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span id="cart-total">R$ 0,00</span>
+                </div>
+
+                <div class="discount-input">
+                    <input type="text" id="discount-code" placeholder="Código de desconto">
+                    <button class="apply-btn" onclick="applyDiscount()">Aplicar</button>
+                    <div class="discount-error" id="discount-error">Código inválido</div>
+                </div>
+
+                <button class="checkout-btn" onclick="showScreen('checkout')">Finalizar Pedido</button>
+            </div>
+        </section>
+
+        <!-- Tela Checkout -->
+        <section id="checkout" class="screen">
+            <button class="back-btn" onclick="showScreen('cart')">←</button>
+            <h2 class="page-title">Finalizar Pedido</h2>
+
+            <div class="payment-method">
+                <h3 style="margin-bottom: 15px;">Método de Pagamento</h3>
+                <div class="payment-option active" onclick="selectPayment('credit-card')">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-text">
+                        <h3>Cartão de Crédito</h3>
+                        <p>Pagamento seguro com cartão</p>
+                    </div>
+                    <i class="fas fa-check" style="color: var(--medium-brown);"></i>
+                </div>
+                <div class="payment-option" onclick="selectPayment('cash')">
+                    <div class="payment-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="payment-text">
+                        <h3>Dinheiro no Estabelecimento</h3>
+                        <p>Pague na retirada do pedido</p>
+                    </div>
+                    <i class="fas fa-check" style="color: var(--medium-brown); display: none;"></i>
+                </div>
+                <div class="payment-option" onclick="selectPayment('pix')">
+                    <div class="payment-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="payment-text">
+                        <h3>PIX</h3>
+                        <p>Pagamento instantâneo via PIX</p>
+                    </div>
+                    <i class="fas fa-check" style="color: var(--medium-brown); display: none;"></i>
+                </div>
+            </div>
+
+            <div class="summary">
+                <h3 style="margin-bottom: 15px;">Resumo do Pedido</h3>
+                <div id="checkout-items">
+                    <!-- Itens serão carregados aqui -->
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="checkout-subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span id="checkout-total">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="checkout-btn" onclick="processPayment()">Confirmar Pedido</button>
+        </section>
+
+        <!-- Tela Agradecimento -->
+        <section id="thank-you" class="screen">
+            <div class="thank-you-screen">
+                <div class="thank-you-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="thank-you-title">Pedido Confirmado!</h2>
+                <p class="thank-you-text">Obrigado pela sua compra! Seu pedido foi confirmado e está sendo preparado.</p>
+
+                <div class="order-info">
+                    <div class="info-row">
+                        <span class="info-label">Número do Pedido:</span>
+                        <span id="order-number">#12345</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Data:</span>
+                        <span id="order-date">29/09/2025</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pagamento:</span>
+                        <span id="order-payment">Cartão de Crédito</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total:</span>
+                        <span id="order-total">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="tracking">
+                    <div class="tracking-step">
+                        <div class="tracking-icon"><i class="fas fa-check"></i></div>
+                        <span class="tracking-label">Confirmado</span>
+                    </div>
+                    <div class="tracking-step">
+                        <div class="tracking-icon"><i class="fas fa-utensils"></i></div>
+                        <span class="tracking-label">Preparando</span>
+                    </div>
+                    <div class="tracking-step">
+                        <div class="tracking-icon"><i class="fas fa-check-circle"></i></div>
+                        <span class="tracking-label">Pronto</span>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="showScreen('home')">Voltar para a Loja</button>
+            </div>
+        </section>
+
+        <!-- Tela Perfil -->
+        <section id="profile" class="screen">
+            <button class="back-btn" onclick="showScreen('home')">←</button>
+            <h2 class="page-title">Perfil</h2>
+
+            <div class="profile-header">
+                <div class="avatar" onclick="showProfilePictureModal()">
+                    <img src="" alt="Foto de perfil" id="profile-picture" style="display: none;">
+                    <span id="avatar-initial">U</span>
+                    <div class="avatar-edit">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profile-username">Usuário</h2>
+                    <p id="profile-email">usuario@exemplo.com</p>
+                </div>
+            </div>
+
+            <div class="profile-menu">
+                <div class="menu-section">CONTA</div>
+                <div class="menu-item" onclick="showScreen('account-details')">
+                    <span>Detalhes da Conta</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" onclick="showScreen('edit-profile')">
+                    <span>Editar Nome</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" onclick="showScreen('notification-settings')">
+                    <span>Configurações de Notificação</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="menu-section">PEDIDOS</div>
+                <div class="menu-item" onclick="showScreen('order-history')">
+                    <span>Histórico de Pedidos</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="menu-section">GERAL</div>
+                <div class="menu-item" onclick="showScreen('help-support')">
+                    <span>Ajuda e Suporte</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" onclick="logout()">
+                    <span>Sair</span>
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Detalhes da Conta -->
+        <section id="account-details" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Detalhes da Conta</h2>
+
+            <div class="edit-profile-form">
+                <div class="form-group">
+                    <label for="account-username">Nome de usuário</label>
+                    <input type="text" id="account-username" placeholder="Seu nome de usuário" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="account-email">E-mail</label>
+                    <input type="email" id="account-email" placeholder="Seu e-mail" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="account-type">Tipo de conta</label>
+                    <input type="text" id="account-type" placeholder="Tipo de conta" readonly>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Editar Perfil -->
+        <section id="edit-profile" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Editar Nome</h2>
+
+            <div class="edit-profile-form">
+                <div class="form-group">
+                    <label for="edit-username">Nome de usuário</label>
+                    <input type="text" id="edit-username" placeholder="Seu nome de usuário">
+                </div>
+                <button class="btn" style="width: 100%" onclick="updateProfile()">Salvar Alterações</button>
+            </div>
+        </section>
+
+        <!-- Tela Configurações de Notificação -->
+        <section id="notification-settings" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Configurações de Notificação</h2>
+
+            <div class="notification-settings">
+                <div class="menu-item">
+                    <div class="payment-text">
+                        <h3>Notificações por E-mail</h3>
+                        <p>Receba atualizações sobre promoções e novos produtos</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="email-notifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="menu-item">
+                    <div class="payment-text">
+                        <h3>Notificações de Pedidos</h3>
+                        <p>Receba atualizações sobre o status dos seus pedidos</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="order-notifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="menu-item">
+                    <div class="payment-text">
+                        <h3>Notificações de Promoções</h3>
+                        <p>Receba alertas sobre ofertas especiais</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="promo-notifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Histórico de Pedidos -->
+        <section id="order-history" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Histórico de Pedidos</h2>
+
+            <div id="orders-container">
+                <!-- Pedidos serão carregados aqui -->
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>Você ainda não fez nenhum pedido</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Ajuda e Suporte -->
+        <section id="help-support" class="screen">
+            <button class="back-btn" onclick="showScreen('profile')">←</button>
+            <h2 class="page-title">Ajuda e Suporte</h2>
+
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <span>FAQ - Perguntas Frequentes</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span>Fale Conosco</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span>Política de Privacidade</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span>Termos de Uso</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para foto de perfil -->
+        <div class="modal" id="profile-picture-modal">
+            <div class="modal-content">
+                <div class="modal-option" onclick="takePhoto()">Tirar Foto</div>
+                <div class="modal-option" onclick="chooseFromGallery()">Escolher da Galeria</div>
+                <button class="modal-close" onclick="closeProfilePictureModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7hWOQz9ZPhd1R7083_r_GqerMVEApui4",
+            authDomain: "copfulcanvas.firebaseapp.com",
+            projectId: "copfulcanvas",
+            storageBucket: "copfulcanvas.firebasestorage.app",
+            messagingSenderId: "170586675065",
+            appId: "1:170586675065:web:3ef586798abcf4e067c1a8"
+        };
+
+        // Inicializar Firebase
+        let auth;
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            console.log("Firebase inicializado com sucesso!");
+        } catch (e) {
+            console.error("Erro ao inicializar o Firebase: ", e);
+        }
+
+        // Estado da aplicação
+        let currentUser = null;
+        let cart = [];
+        let favorites = [];
+        let currentProductDetail = null;
+        let selectedSize = 'P';
+        let selectedMilk = 'com-leite';
+        let productQuantity = 1;
+        let discountApplied = 0;
+        let selectedPayment = 'credit-card';
+        let products = [
+            { 
+                id: 1, 
+                name: "Café Expresso", 
+                price: 5.90, 
+                category: "coffee", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/vrlLQPaoVtDSWzWr.jpg", 
+                description: "Café forte e encorpado, perfeito para começar o dia.", 
+                badge: "Mais Vendido" 
+            },
+            { 
+                id: 2, 
+                name: "Cappuccino", 
+                price: 8.50, 
+                category: "coffee", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/ublxQXGRiWAcBXOB.jpg", 
+                description: "Café cremoso com leite vaporizado e uma camada de espuma.", 
+                badge: "" 
+            },
+            { 
+                id: 3, 
+                name: "Latte Macchiato", 
+                price: 9.90, 
+                category: "coffee", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/bjlImesUPzfxnhZQ.jpeg", 
+                description: "Leite vaporizado com um toque de café expresso.", 
+                badge: "" 
+            },
+            { 
+                id: 4, 
+                name: "Café", 
+                price: 7.50, 
+                category: "coffee", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/cOhnVfbZraguqvvU.jpeg", 
+                description: "Café tradicional preparado com grãos selecionados.", 
+                badge: "Novo" 
+            },
+            { 
+                id: 5, 
+                name: "Chá Verde", 
+                price: 6.50, 
+                category: "tea", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/rXNNzmEdqaoBmWpo.jpeg", 
+                description: "Chá verde refrescante com propriedades antioxidantes.", 
+                badge: "" 
+            },
+            { 
+                id: 6, 
+                name: "Croissant", 
+                price: 7.90, 
+                category: "pastry", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/GnsMhTnTqxApyGUW.jpg", 
+                description: "Croissant folhado e crocante, perfeito para acompanhar o café.", 
+                badge: "" 
+            },
+            { 
+                id: 7, 
+                name: "Bolo de Cenoura", 
+                price: 12.90, 
+                category: "pastry", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/buQteXExKCPdxela.webp", 
+                description: "Bolo de cenoura com cobertura de chocolate.", 
+                badge: "" 
+            },
+            { 
+                id: 8, 
+                name: "Mocha Especial", 
+                price: 11.90, 
+                category: "special", 
+                image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663161635936/rrjMVGNCCMlIQcXC.jpeg", 
+                description: "Café com chocolate, leite vaporizado e chantilly.", 
+                badge: "Especial" 
+            }
+        ];
+
+        // Funções de navegação
+        function showScreen(screenId) {
+            console.log(`Ativando tela: ${screenId}`);
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            } else {
+                console.error(`Tela com ID ${screenId} não encontrada.`);
+            }
+            
+            // Atualizar navegação ativa
+            if (screenId === 'home') {
+                updateNavActive('home');
+                updateGreeting();
+                loadProducts();
+            } else if (screenId === 'favorites') {
+                updateNavActive('favorites');
+                loadFavorites();
+            } else if (screenId === 'cart') {
+                updateNavActive('cart');
+                loadCart();
+            } else if (screenId === 'profile') {
+                updateNavActive('profile');
+                loadProfile();
+            } else if (screenId === 'order-history') {
+                loadOrderHistory();
+            }
+        }
+
+        function updateNavActive(activeItem) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.querySelector('span').textContent === 
+                    (activeItem === 'home' ? 'Início' : 
+                     activeItem === 'favorites' ? 'Favoritos' : 
+                     activeItem === 'cart' ? 'Carrinho' : 'Perfil')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function updateGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = "Boa Noite";
+
+            if (hour < 12) {
+                greeting = "Bom Dia";
+            } else if (hour < 18) {
+                greeting = "Boa Tarde";
+            }
+
+            if (currentUser) {
+                db.collection('users').doc(currentUser.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            const username = userData.username;
+                            if (username && username !== 'Usuário') {
+                                document.getElementById('user-greeting').textContent = `${greeting}, ${username}`;
+                            } else {
+                                document.getElementById('user-greeting').textContent = greeting;
+                            }
+                        } else {
+                            document.getElementById('user-greeting').textContent = greeting;
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('user-greeting').textContent = greeting;
+                    });
+            } else {
+                document.getElementById('user-greeting').textContent = greeting;
+            }
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Funções de autenticação
+        function login() {
+            const email = document.getElementById('login-identifier').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Validar campos
+            if (!email || !password) {
+                showLoginError('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    showScreen('home');
+                    loadProducts();
+                })
+                .catch((error) => {
+                    showLoginError('Você errou um dos dados. Caso não tenha conta se cadastre.');
+                });
+        }
+
+        function signUp() {
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validar campos
+            if (!username || !email || !password || !confirmPassword) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('As senhas não coincidem.');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    
+                    // Salvar informações adicionais do usuário no Firestore
+                    return db.collection('users').doc(currentUser.uid).set({
+                        username: username,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        accountType: 'email'
+                    });
+                })
+                .then(() => {
+                    showScreen('home');
+                    loadProducts();
+                })
+                .catch((error) => {
+                    alert('Erro ao criar conta: ' + error.message);
+                });
+        }
+
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    currentUser = result.user;
+                    
+                    // Verificar se é um novo usuário ou atualizar dados existentes
+                    return db.collection('users').doc(currentUser.uid).get()
+                        .then((doc) => {
+                            if (!doc.exists || result.additionalUserInfo.isNewUser) {
+                                // Criar novo usuário
+                                return db.collection('users').doc(currentUser.uid).set({
+                                    username: currentUser.displayName || 'Usuário',
+                                    email: currentUser.email,
+                                    photoURL: currentUser.photoURL,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    accountType: 'google'
+                                });
+                            } else {
+                                // Atualizar dados do usuário existente se necessário
+                                const userData = doc.data();
+                                const updates = {};
+                                
+                                if (userData.photoURL !== currentUser.photoURL) {
+                                    updates.photoURL = currentUser.photoURL;
+                                }
+                                if (userData.email !== currentUser.email) {
+                                    updates.email = currentUser.email;
+                                }
+                                
+                                if (Object.keys(updates).length > 0) {
+                                    return db.collection('users').doc(currentUser.uid).update(updates);
+                                }
+                            }
+                        });
+                })
+                .then(() => {
+                    showScreen('home');
+                    loadProducts();
+                    loadProfile(); // Carregar perfil para exibir dados do Google
+                })
+                .catch((error) => {
+                    console.error('Erro no login com Google:', error);
+                    if (error.code === 'auth/popup-closed-by-user') {
+                        // Usuário fechou o popup, não mostrar erro
+                        return;
+                    } else if (error.code === 'auth/account-exists-with-different-credential') {
+                        alert('Esta conta já existe com um método de login diferente. Tente fazer login com e-mail e senha.');
+                    } else {
+                        alert('Erro ao fazer login com Google: ' + error.message);
+                    }
+                });
+        }
+
+        function resetPassword() {
+            const email = document.getElementById("login-identifier").value;
+            if (!email) {
+                alert("Por favor, digite seu e-mail no campo de login para redefinir a senha.");
+                return;
+            }
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert("E-mail de redefinição de senha enviado para " + email + "!");
+                })
+                .catch((error) => {
+                    alert("Erro ao enviar e-mail de redefinição: " + error.message);
+                });
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                currentUser = null;
+                cart = [];
+                favorites = [];
+                showScreen('get-started');
+            });
+        }
+
+        function showLoginError(message) {
+            // Mostrar mensagem de erro em todos os campos de erro
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = message;
+                error.style.display = 'block';
+            });
+            
+            // Adicionar classe de erro aos inputs
+            document.querySelectorAll('.form-group input').forEach(input => {
+                input.classList.add('error');
+            });
+        }
+
+        // Funções de produtos
+        function loadProducts() {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product';
+                productElement.onclick = () => showProductDetail(product.id);
+                productElement.innerHTML = `
+                    <div class="product-img">
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                        <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${product.id})">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                    </div>
+                `;
+                container.appendChild(productElement);
+            });
+        }
+
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            currentProductDetail = product;
+            productQuantity = 1;
+            selectedSize = 'P';
+            selectedMilk = 'com-leite';
+            
+            document.getElementById('detail-product-name').textContent = product.name;
+            document.getElementById('detail-product-price').textContent = `R$ ${product.price.toFixed(2)}`;
+            document.getElementById('detail-product-description').textContent = product.description;
+            
+            const imageElement = document.getElementById('detail-product-image');
+            const iconElement = document.getElementById('detail-product-icon');
+            
+            if (product.image) {
+                imageElement.src = product.image;
+                imageElement.style.display = 'block';
+                iconElement.style.display = 'none';
+            } else {
+                imageElement.style.display = 'none';
+                iconElement.style.display = 'block';
+            }
+            
+            document.getElementById('product-quantity').textContent = productQuantity;
+            
+            // Resetar seleções
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector('.size-option').classList.add('active');
+            
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector('.option-item').classList.add('active');
+            
+            showScreen('product-detail');
+        }
+
+        function selectSize(size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function selectMilk(milk) {
+            selectedMilk = milk;
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function changeQuantity(change) {
+            productQuantity = Math.max(1, productQuantity + change);
+            document.getElementById('product-quantity').textContent = productQuantity;
+        }
+
+        function addToCartFromDetail() {
+            if (!currentProductDetail) return;
+
+            // Calcular preço baseado no tamanho
+            let priceMultiplier = 1;
+            if (selectedSize === 'M') priceMultiplier = 1.2;
+            if (selectedSize === 'G') priceMultiplier = 1.4;
+
+            const finalPrice = currentProductDetail.price * priceMultiplier;
+
+            const cartItem = {
+                id: currentProductDetail.id,
+                name: currentProductDetail.name,
+                price: finalPrice,
+                image: currentProductDetail.image,
+                quantity: productQuantity,
+                size: selectedSize,
+                milk: selectedMilk
+            };
+
+            const existingItemIndex = cart.findIndex(item => 
+                item.id === cartItem.id && 
+                item.size === cartItem.size && 
+                item.milk === cartItem.milk
+            );
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += cartItem.quantity;
+            } else {
+                cart.push(cartItem);
+            }
+
+            updateCartBadge();
+            alert(`${currentProductDetail.name} adicionado ao carrinho!`);
+            showScreen('home');
+        }
+
+        function filterProducts(category) {
+            // Atualizar categorias ativas
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filtrar produtos
+            const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            filteredProducts.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product';
+                productElement.onclick = () => showProductDetail(product.id);
+                productElement.innerHTML = `
+                    <div class="product-img">
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                        <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${product.id})">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                    </div>
+                `;
+                container.appendChild(productElement);
+            });
+        }
+
+        function toggleFavorite(productId) {
+            if (!currentUser) {
+                showScreen('login');
+                return;
+            }
+
+            const index = favorites.indexOf(productId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(productId);
+            }
+
+            loadProducts();
+            if (document.getElementById('favorites').classList.contains('active')) {
+                loadFavorites();
+            }
+        }
+
+        function loadFavorites() {
+            const container = document.getElementById('favorites-container');
+            const favoriteProducts = products.filter(p => favorites.includes(p.id));
+
+            if (favoriteProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>Você ainda não tem favoritos</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            favoriteProducts.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product';
+                productElement.onclick = () => showProductDetail(product.id);
+                productElement.innerHTML = `
+                    <div class="product-img">
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                        <button class="favorite-btn active" onclick="event.stopPropagation(); toggleFavorite(${product.id})">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                    </div>
+                `;
+                container.appendChild(productElement);
+            });
+        }
+
+        // Funções do carrinho
+        function loadCart() {
+            const container = document.getElementById('cart-container');
+            const summary = document.getElementById('cart-summary');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Você ainda não adicionou nenhum produto no carrinho.</p>
+                    </div>
+                `;
+                summary.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = '';
+            summary.style.display = 'block';
+
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 8px; overflow: hidden;">
+                        <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                        <div style="font-size: 0.8rem; color: var(--soft-brown); margin-top: 5px;">
+                            ${item.size} • ${item.milk === 'com-leite' ? 'Com Leite' : 'Sem Leite'}
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="qty-btn" onclick="updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
+                            <span class="qty-value">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateCartQuantity(${index}, ${item.quantity + 1})">+</button>
+                            <button class="action-btn" onclick="removeFromCart(${index})" style="margin-left: 15px;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(cartItem);
+            });
+
+            const total = subtotal - discountApplied;
+
+            document.getElementById('cart-subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+            
+            // Mostrar desconto se aplicado
+            const discountRow = document.getElementById('cart-discount-row');
+            if (discountApplied > 0) {
+                const discountPercent = Math.round((discountApplied / subtotal) * 100);
+                if (discountRow) {
+                    discountRow.style.display = 'flex';
+                    document.getElementById('cart-discount').textContent = `-R$ ${discountApplied.toFixed(2)} (${discountPercent}%)`;
+                }
+            } else if (discountRow) {
+                discountRow.style.display = 'none';
+            }
+            
+            document.getElementById('cart-total').textContent = `R$ ${total.toFixed(2)}`;
+
+            // Atualizar checkout também
+            document.getElementById('checkout-subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+            document.getElementById('checkout-total').textContent = `R$ ${total.toFixed(2)}`;
+
+            // Atualizar itens do checkout
+            const checkoutItems = document.getElementById('checkout-items');
+            checkoutItems.innerHTML = '';
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'summary-row';
+                itemElement.innerHTML = `
+                    <span>${item.name} (${item.quantity}x)</span>
+                    <span>R$ ${itemTotal.toFixed(2)}</span>
+                `;
+                checkoutItems.appendChild(itemElement);
+            });
+        }
+
+        function updateCartQuantity(index, newQuantity) {
+            if (newQuantity < 1) {
+                removeFromCart(index);
+                return;
+            }
+
+            cart[index].quantity = newQuantity;
+            loadCart();
+            updateCartBadge();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            
+            // Se o carrinho ficar vazio, zerar o desconto
+            if (cart.length === 0) {
+                discountApplied = 0;
+            }
+            
+            loadCart();
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('nav-cart-badge');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function applyDiscount() {
+            const code = document.getElementById('discount-code').value.toUpperCase();
+            const error = document.getElementById('discount-error');
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+            if (code === 'TESTE') {
+                discountApplied = subtotal * 0.1;
+                error.style.display = 'none';
+                document.getElementById('discount-code').classList.remove('error');
+            } else if (code === 'BEST') {
+                discountApplied = subtotal * 0.3;
+                error.style.display = 'none';
+                document.getElementById('discount-code').classList.remove('error');
+            } else if (code === 'BIS') {
+                discountApplied = subtotal;
+                error.style.display = 'none';
+                document.getElementById('discount-code').classList.remove('error');
+            } else {
+                discountApplied = 0;
+                error.style.display = 'block';
+                document.getElementById('discount-code').classList.add('error');
+                return;
+            }
+
+            // Atualizar a exibição do carrinho para mostrar o desconto imediatamente
+            loadCart();
+            
+            const total = subtotal - discountApplied;
+            const discountPercent = Math.round((discountApplied / subtotal) * 100);
+            
+            alert(`Cupom ${code} aplicado com sucesso! Desconto de R$ ${discountApplied.toFixed(2)} (${discountPercent}%)`);
+        }
+
+        // Funções de checkout
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('active');
+                option.querySelector('.fa-check').style.display = 'none';
+            });
+
+            event.currentTarget.classList.add('active');
+            event.currentTarget.querySelector('.fa-check').style.display = 'block';
+        }
+
+        function processPayment() {
+            if (!currentUser) {
+                showScreen('login');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            // Calcular total
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const total = subtotal - discountApplied;
+
+            // Criar pedido no Firestore
+            const orderData = {
+                userId: currentUser.uid,
+                items: cart,
+                subtotal: subtotal,
+                discount: discountApplied,
+                total: total,
+                status: 'confirmed',
+                paymentMethod: selectedPayment === 'credit-card' ? 'Cartão de Crédito' : 
+                              selectedPayment === 'cash' ? 'Dinheiro no Estabelecimento' : 'PIX',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection('orders').add(orderData)
+                .then((docRef) => {
+                    // Atualizar a tela de agradecimento com os dados do pedido
+                    document.getElementById('order-number').textContent = '#' + docRef.id.substring(0, 8).toUpperCase();
+                    document.getElementById('order-date').textContent = new Date().toLocaleDateString('pt-BR');
+                    document.getElementById('order-payment').textContent = orderData.paymentMethod;
+                    document.getElementById('order-total').textContent = `R$ ${total.toFixed(2)}`;
+
+                    // Limpar carrinho
+                    cart = [];
+                    discountApplied = 0;
+                    updateCartBadge();
+
+                    // Mostrar tela de agradecimento
+                    showScreen('thank-you');
+                    
+                    // Notificar cliente após 17 minutos
+                    setTimeout(() => {
+                        alert('Seu pedido está pronto para retirada!');
+                    }, 17 * 60 * 1000); // 17 minutos em milissegundos
+                })
+                .catch((error) => {
+                    alert('Erro ao processar pedido: ' + error.message);
+                });
+        }
+
+        // Funções de perfil
+        function loadProfile() {
+            if (!currentUser) return;
+
+            document.getElementById('profile-email').textContent = currentUser.email;
+            document.getElementById('account-email').value = currentUser.email;
+
+            // Carregar dados adicionais do Firestore
+            db.collection('users').doc(currentUser.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        const username = userData.username || 'Usuário';
+                        const accountType = userData.accountType || 'email';
+                        
+                        document.getElementById('profile-username').textContent = username;
+                        document.getElementById('account-username').value = username;
+                        document.getElementById('edit-username').value = username;
+                        document.getElementById('avatar-initial').textContent = username.charAt(0).toUpperCase();
+                        
+                        // Mostrar tipo de conta
+                        const accountTypeText = accountType === 'google' ? 'Google' : 'E-mail';
+                        document.getElementById('account-type').value = accountTypeText;
+
+                        // Carregar foto de perfil se existir
+                        if (userData.photoURL) {
+                            document.getElementById('profile-picture').src = userData.photoURL;
+                            document.getElementById('profile-picture').style.display = 'block';
+                            document.getElementById('avatar-initial').style.display = 'none';
+                        }
+
+                        // Carregar configurações de notificação
+                        if (userData.notifications) {
+                            document.getElementById('email-notifications').checked = userData.notifications.email !== false;
+                            document.getElementById('order-notifications').checked = userData.notifications.orders !== false;
+                            document.getElementById('promo-notifications').checked = userData.notifications.promos !== false;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro ao carregar perfil:', error);
+                });
+        }
+
+        function updateProfile() {
+            if (!currentUser) return;
+
+            const newUsername = document.getElementById('edit-username').value;
+            if (!newUsername) {
+                alert('Por favor, digite um nome de usuário.');
+                return;
+            }
+
+            db.collection('users').doc(currentUser.uid).update({
+                username: newUsername
+            })
+            .then(() => {
+                alert('Perfil atualizado com sucesso!');
+                loadProfile();
+                showScreen('profile');
+            })
+            .catch((error) => {
+                alert('Erro ao atualizar perfil: ' + error.message);
+            });
+        }
+
+        function loadOrderHistory() {
+            if (!currentUser) return;
+
+            const container = document.getElementById('orders-container');
+            
+            db.collection('orders')
+                .where('userId', '==', currentUser.uid)
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-shopping-bag"></i>
+                                <p>Você ainda não fez nenhum pedido</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = '';
+                    
+                    // Converter para array e ordenar manualmente
+                    const orders = [];
+                    querySnapshot.forEach((doc) => {
+                        orders.push({
+                            id: doc.id,
+                            data: doc.data()
+                        });
+                    });
+                    
+                    // Ordenar por data de criação (mais recente primeiro)
+                    orders.sort((a, b) => {
+                        const dateA = a.data.createdAt ? a.data.createdAt.toDate() : new Date(0);
+                        const dateB = b.data.createdAt ? b.data.createdAt.toDate() : new Date(0);
+                        return dateB - dateA;
+                    });
+                    
+                    orders.forEach((orderDoc) => {
+                        const order = orderDoc.data;
+                        const orderDate = order.createdAt ? order.createdAt.toDate().toLocaleDateString('pt-BR') : 'Data não disponível';
+                        
+                        const orderElement = document.createElement('div');
+                        orderElement.className = 'order-item';
+                        orderElement.innerHTML = `
+                            <div>
+                                <div style="font-weight: 500; margin-bottom: 5px;">
+                                    Pedido #${orderDoc.id.substring(0, 8).toUpperCase()}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--soft-brown); margin-bottom: 5px;">
+                                    ${orderDate} • ${order.paymentMethod}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--soft-brown);">
+                                    ${order.items.length} item(s)
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 700; color: var(--medium-brown);">
+                                    R$ ${order.total.toFixed(2)}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--success-green); margin-top: 5px;">
+                                    ${order.status === 'confirmed' ? 'Confirmado' : 'Processando'}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(orderElement);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Erro ao carregar histórico:', error);
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Erro ao carregar histórico de pedidos</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Funções do modal de foto de perfil
+        function showProfilePictureModal() {
+            document.getElementById('profile-picture-modal').style.display = 'flex';
+        }
+
+        function closeProfilePictureModal() {
+            document.getElementById('profile-picture-modal').style.display = 'none';
+        }
+
+        function takePhoto() {
+            alert('Funcionalidade de câmera não implementada nesta versão.');
+            closeProfilePictureModal();
+        }
+
+        function chooseFromGallery() {
+            alert('Funcionalidade de galeria não implementada nesta versão.');
+            closeProfilePictureModal();
+        }
+
+        // Inicializar aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se há usuário logado
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    showScreen('home');
+                    loadProducts();
+                } else {
+                    showScreen('get-started');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
